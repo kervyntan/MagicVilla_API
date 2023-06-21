@@ -85,6 +85,16 @@ namespace MagicVilla_VillaAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
+            // if villa's name is NOT unique, then add 
+            if (VillaStore.villaList.FirstOrDefault(x => x.Name.ToLower() == villaDTO.Name.ToLower()) != null)
+            {
+                // First parameter is the key i.e."CustomError" - can be left empty
+                ModelState.AddModelError("CustomError", "Villa already Exists!");
+                
+                // Throws error 400, with response body
+                return BadRequest(ModelState);
+            }
+
             // Order the list by descending order,
             // Get the latest (i.e. First item in the list) based on predicate passed
             // Increment that Id
