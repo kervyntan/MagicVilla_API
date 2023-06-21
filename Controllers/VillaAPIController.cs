@@ -107,5 +107,26 @@ namespace MagicVilla_VillaAPI.Controllers
             // For us to use the GetVilla Endpoint to retrieve this specific added Villa
             return CreatedAtRoute("GetVilla", new { id = villaDTO.Id }, villaDTO);
         }
+
+        [HttpDelete("{id: int}", Name = "DeleteVilla")]
+        // Use IActionResult since we don't need to specify the return type
+        public IActionResult DeleteVilla(int id)
+        {
+            if(id == 0)
+            {
+                return BadRequest("Villa with this Id does not exist.");
+            }
+
+            var villa = VillaStore.villaList.FirstOrDefault(x => x.Id == id);
+
+            if (villa == null)
+            {
+                return NotFound("Villa specified is not found.");
+            }
+
+            VillaStore.villaList.Remove(villa);
+            return NoContent();
+        }
+
     }
 }
