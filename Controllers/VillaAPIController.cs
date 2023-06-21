@@ -37,7 +37,20 @@ namespace MagicVilla_VillaAPI.Controllers
         [HttpPost("id")]
         public ActionResult<VillaDTO> UpdateVillaName(int id, string updatedName)
         {
-            VillaDTO entity = VillaStore.villaList.Find(x => x.Id == id);
+            if (id == -1 || id > VillaStore.villaList.Count)
+            {
+                return BadRequest("Id provided is invalid.");
+            }
+
+            // FirstOrDefault -> When you know that you will need to check whether
+            // there was an element or not
+            VillaDTO entity = VillaStore.villaList.FirstOrDefault(x => x.Id == id);
+
+            if (entity == null)
+                // if somehow passes Id check
+            {
+                return NotFound("Villa is not found.");
+            }
 
             entity.Name = updatedName;
 
