@@ -12,6 +12,7 @@ namespace MagicVilla_VillaAPI.Controllers
     public class VillaAPIController : ControllerBase
     {
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<VillaDTO>> GetVillas()
         {
             return Ok(VillaStore.villaList);
@@ -25,8 +26,16 @@ namespace MagicVilla_VillaAPI.Controllers
         // appending the placeholder for id to api/villa
         // makes sure id passed in is required, and also of type int 
         [HttpGet("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<VillaDTO> GetVilla(int id)
         {
+            if (id == -1 || id > VillaStore.villaList.Count)
+            {
+                return BadRequest("Id provided is invalid.");
+            }
+
             return Ok(VillaStore.villaList.FirstOrDefault
             (
                 u => u.Id == id
