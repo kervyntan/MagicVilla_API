@@ -69,6 +69,11 @@ namespace MagicVilla_VillaAPI.Controllers
         [HttpPost("create")]
         public ActionResult<VillaDTO> CreateVilla([FromBody]VillaDTO villaDTO)
         {
+            // Used to check the Model validation (eg. MaxLength) IF you don't use [ApiController] above
+            //if(!ModelState.IsValid) // Model here refers to the villaDTO argument
+            //{
+            //    return BadRequest("Length of name is too long.");
+            //}
             // If the new villa passed in is invalid, then cannot
             if (villaDTO == null || villaDTO.Name == "")
             {
