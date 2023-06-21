@@ -65,5 +65,28 @@ namespace MagicVilla_VillaAPI.Controllers
 
             return Ok(entity);
         }
+
+        [HttpPost("create")]
+        public ActionResult<VillaDTO> CreateVilla([FromBody]VillaDTO villaDTO)
+        {
+            // If the new villa passed in is invalid, then cannot
+            if (villaDTO == null || villaDTO.Name == "")
+            {
+                return BadRequest(villaDTO);
+            }
+
+            if (villaDTO.Id > 0)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            // Order the list by descending order,
+            // Get the latest (i.e. First item in the list) based on predicate passed
+            // Increment that Id
+            villaDTO.Id = VillaStore.villaList.OrderByDescending(x => x.Id).FirstOrDefault().Id + 1;
+            VillaStore.villaList.Add(villaDTO);
+
+            return Ok(villaDTO);
+        }
     }
 }

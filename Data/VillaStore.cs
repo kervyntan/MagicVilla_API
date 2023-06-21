@@ -8,7 +8,8 @@ namespace MagicVilla_VillaAPI.Data
         {
             new VillaDTO { Id = 1, Name = "Pool Van" },
             new VillaDTO { Id = 2, Name = "Villa House" },
-            new VillaDTO { Id = 3, Name = "Party House" }
+            new VillaDTO { Id = 3, Name = "Party House" },
+            new VillaDTO { Id = 7, Name= "Eighth" }
         };
     }
 }
