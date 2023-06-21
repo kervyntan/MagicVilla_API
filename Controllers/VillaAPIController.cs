@@ -25,7 +25,7 @@ namespace MagicVilla_VillaAPI.Controllers
         // Getting Villa by Id
         // appending the placeholder for id to api/villa
         // makes sure id passed in is required, and also of type int 
-        [HttpGet("{id:int}")]
+        [HttpGet("{id:int}", Name = "GetVilla")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -86,7 +86,11 @@ namespace MagicVilla_VillaAPI.Controllers
             villaDTO.Id = VillaStore.villaList.OrderByDescending(x => x.Id).FirstOrDefault().Id + 1;
             VillaStore.villaList.Add(villaDTO);
 
-            return Ok(villaDTO);
+            //return Ok(villaDTO);
+
+            // In Response Headers -> location will now have the available route
+            // For us to use the GetVilla Endpoint to retrieve this specific added Villa
+            return CreatedAtRoute("GetVilla", new { id = villaDTO.Id }, villaDTO);
         }
     }
 }
