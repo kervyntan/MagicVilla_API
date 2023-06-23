@@ -2,6 +2,7 @@
 using MagicVilla_VillaAPI.Models;
 using MagicVilla_VillaAPI.Models.Dtos;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics.Metrics;
 
 namespace MagicVilla_VillaAPI.Controllers
 {
@@ -42,8 +43,8 @@ namespace MagicVilla_VillaAPI.Controllers
             ));
         }
 
-        // POST Method to update name of villa
-        [HttpPost("id")]
+        // PUT Method to update name of villa
+        [HttpPut("id")]
         public ActionResult<VillaDTO> UpdateVillaName(int id, string updatedName)
         {
             if (id == -1 || id > VillaStore.villaList.Count)
@@ -112,7 +113,7 @@ namespace MagicVilla_VillaAPI.Controllers
         // Use IActionResult since we don't need to specify the return type
         public IActionResult DeleteVilla(int id)
         {
-            if(id == 0)
+            if (id == 0)
             {
                 return BadRequest("Villa with this Id does not exist.");
             }
