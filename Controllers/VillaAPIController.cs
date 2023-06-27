@@ -12,10 +12,18 @@ namespace MagicVilla_VillaAPI.Controllers
     [ApiController]
     public class VillaAPIController : ControllerBase
     {
+        private readonly ILogger<VillaAPIController> _logger;
+
+        public VillaAPIController(ILogger<VillaAPIController> logger)
+        {
+            _logger = logger;
+        }
+
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<VillaDTO>> GetVillas()
         {
+            _logger.LogInformation("All Villas retrieved.");
             return Ok(VillaStore.villaList);
             //return new List<VillaDTO>
             //{
@@ -32,6 +40,12 @@ namespace MagicVilla_VillaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<VillaDTO> GetVilla(int id)
         {
+            if (id == 0)
+            {
+                _logger.LogError("Id of " + id + "does not exist.");
+                return BadRequest();
+            }
+
             if (id == -1 || id > VillaStore.villaList.Count)
             {
                 return BadRequest("Id provided is invalid.");
@@ -109,7 +123,7 @@ namespace MagicVilla_VillaAPI.Controllers
             return CreatedAtRoute("GetVilla", new { id = villaDTO.Id }, villaDTO);
         }
 
-        [HttpDelete("{id: int}", Name = "DeleteVilla")]
+        [HttpDelete("{id:int}", Name = "DeleteVilla")]
         // Use IActionResult since we don't need to specify the return type
         public IActionResult DeleteVilla(int id)
         {
