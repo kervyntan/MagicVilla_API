@@ -5,6 +5,10 @@ namespace MagicVilla_VillaAPI.Data
 {
     public class ApplicationDbContext : DbContext
     {
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        {
+
+        }
         // Create individual dbset for each table
 
         // Name is the name of the table in the database
