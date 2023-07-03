@@ -14,6 +14,8 @@ namespace MagicVilla_VillaAPI.Data
         // Name is the name of the table in the database
         public DbSet<Villa> Villas { get; set; }
 
+        public DbSet<User> Users { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Villa>().HasData(
@@ -78,6 +80,22 @@ namespace MagicVilla_VillaAPI.Data
                   CreatedDate = DateTime.Now
               }
             );
+
+            modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    Id = 1,
+                    Name = "Kervyn",
+                    Timestamp = DateTime.Now
+                },
+
+                new User
+                {
+                    Id = 2, 
+                    Name = "Jon",
+                    Timestamp = DateTime.Now
+                }
+            ); 
 
         }
     }
