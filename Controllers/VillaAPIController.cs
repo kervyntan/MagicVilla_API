@@ -16,7 +16,7 @@ namespace MagicVilla_VillaAPI.Controllers
         private readonly ApplicationDbContext _context;
 
         // Initialize constructor to use the DbContext from Data
-        public VillaAPIController(ApplicationDbContext context) 
+        public VillaAPIController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -24,7 +24,7 @@ namespace MagicVilla_VillaAPI.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<VillaDTO>> GetVillas()
-        { 
+        {
             return Ok(_context.Villas.ToList());
             //return new List<VillaDTO>
             //{
@@ -46,12 +46,12 @@ namespace MagicVilla_VillaAPI.Controllers
                 return BadRequest();
             }
 
-            if (id == -1 || id > _context.Villas.villaList.Count)
+            if (id == -1 || id > _context.Villas.ToList().Count)
             {
                 return BadRequest("Id provided is invalid.");
             }
 
-            return Ok(_context.Villas.villaList.FirstOrDefault
+            return Ok(_context.Villas.FirstOrDefault
             (
                 u => u.Id == id
             ));
@@ -61,17 +61,17 @@ namespace MagicVilla_VillaAPI.Controllers
         [HttpPut("id")]
         public ActionResult<VillaDTO> UpdateVillaName(int id, string updatedName)
         {
-            if (id == -1 || id > _context.Villas.villaList.Count)
+            if (id == -1 || id > _context.Villas.ToList().Count)
             {
                 return BadRequest("Id provided is invalid.");
             }
 
             // FirstOrDefault -> When you know that you will need to check whether
             // there was an element or not
-            VillaDTO entity = _context.Villas.villaList.FirstOrDefault(x => x.Id == id);
+            Villa entity = _context.Villas.ToList().FirstOrDefault(x => x.Id == id);
 
             if (entity == null)
-                // if somehow passes Id check
+            // if somehow passes Id check
             {
                 return NotFound("Villa is not found.");
             }
@@ -82,7 +82,7 @@ namespace MagicVilla_VillaAPI.Controllers
         }
 
         [HttpPost("create")]
-        public ActionResult<VillaDTO> CreateVilla([FromBody]VillaDTO villaDTO)
+        public ActionResult<VillaDTO> CreateVilla([FromBody] VillaDTO villaDTO)
         {
             // Used to check the Model validation (eg. MaxLength) IF you don't use [ApiController] above
             //if(!ModelState.IsValid) // Model here refers to the villaDTO argument
@@ -101,11 +101,11 @@ namespace MagicVilla_VillaAPI.Controllers
             }
 
             // if villa's name is NOT unique, then add 
-            if (_context.Villas.villaList.FirstOrDefault(x => x.Name.ToLower() == villaDTO.Name.ToLower()) != null)
+            if (_context.Villas.ToList().FirstOrDefault(x => x.Name.ToLower() == villaDTO.Name.ToLower()) != null)
             {
                 // First parameter is the key i.e."CustomError" - can be left empty
                 ModelState.AddModelError("CustomError", "Villa already Exists!");
-                
+
                 // Throws error 400, with response body
                 return BadRequest(ModelState);
             }
@@ -113,8 +113,21 @@ namespace MagicVilla_VillaAPI.Controllers
             // Order the list by descending order,
             // Get the latest (i.e. First item in the list) based on predicate passed
             // Increment that Id
-            villaDTO.Id = _context.Villas.villaList.OrderByDescending(x => x.Id).FirstOrDefault().Id + 1;
-            _context.Villas.villaList.Add(villaDTO);
+            //villaDTO.Id = _context.Villas.villaList.OrderByDescending(x => x.Id).FirstOrDefault().Id + 1;
+            //_context.Villas.villaList.Add(villaDTO);
+            Villa model = new()
+            {
+                Amenity = villaDTO.Amenity,
+                Details = villaDTO.Details,
+                Id = villaDTO.Id,
+                Name = villaDTO.Name,
+                ImageUrl = villaDTO.ImageUrl,
+                Occupancy = villaDTO.Occupancy,
+                Rate = villaDTO.Rate,
+                Sqft = villaDTO.Sqft
+            };
+            _context.Villas.Add(model);
+            _context.SaveChanges();
 
             //return Ok(villaDTO);
 
@@ -132,14 +145,40 @@ namespace MagicVilla_VillaAPI.Controllers
                 return BadRequest("Villa with this Id does not exist.");
             }
 
-            var villa = _context.Villas.villaList.FirstOrDefault(x => x.Id == id);
+            var villa = _context.Villas.FirstOrDefault(x => x.Id == id);
 
             if (villa == null)
             {
                 return NotFound("Villa specified is not found.");
             }
 
-            _context.Villas.villaList.Remove(villa);
+            _context.Villas.Remove(villa);
+            return NoContent();
+        }
+
+        [HttpPut("{id:int}", Name = "UpdateVilla")]
+        public IActionResult UpdateVilla(int id, [FromBody] VillaDTO villaDTO)
+        {
+            if(villaDTO == null || id != villaDTO.Id)
+            {
+                return BadRequest();
+            }
+
+            Villa model = new()
+            {
+                Amenity = villaDTO.Amenity,
+                Details = villaDTO.Details,
+                Id = villaDTO.Id,
+                Name = villaDTO.Name,
+                ImageUrl = villaDTO.ImageUrl,
+                Occupancy = villaDTO.Occupancy,
+                Rate = villaDTO.Rate,
+                Sqft = villaDTO.Sqft
+            };
+
+            _context.Villas.Update(model);
+            _context.SaveChanges();
+
             return NoContent();
         }
 
