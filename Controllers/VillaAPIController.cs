@@ -110,11 +110,6 @@ namespace MagicVilla_VillaAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            // Order the list by descending order,
-            // Get the latest (i.e. First item in the list) based on predicate passed
-            // Increment that Id
-            //villaDTO.Id = _context.Villas.villaList.OrderByDescending(x => x.Id).FirstOrDefault().Id + 1;
-            //_context.Villas.villaList.Add(villaDTO);
             Villa model = new()
             {
                 Amenity = villaDTO.Amenity,
@@ -127,6 +122,8 @@ namespace MagicVilla_VillaAPI.Controllers
                 Sqft = villaDTO.Sqft
             };
             _context.Villas.Add(model);
+
+            // Get all changes done and save it to DB
             _context.SaveChanges();
 
             //return Ok(villaDTO);
