@@ -1,4 +1,5 @@
-﻿using MagicVilla_VillaAPI.Data;
+﻿using AutoMapper;
+using MagicVilla_VillaAPI.Data;
 using MagicVilla_VillaAPI.Models;
 using MagicVilla_VillaAPI.Models.Dtos;
 using Microsoft.AspNetCore.JsonPatch;
@@ -16,17 +17,24 @@ namespace MagicVilla_VillaAPI.Controllers
 
         private readonly ApplicationDbContext _context;
 
+        private readonly IMapper _mapper;
+
         // Initialize constructor to use the DbContext from Data
-        public VillaAPIController(ApplicationDbContext context)
+        public VillaAPIController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<VillaDTO>>> GetVillas()
         {
-            return Ok(await _context.Villas.ToListAsync());
+            // Get list of Villas
+            IEnumerable<Villa> villaList = await _context.Villas.ToListAsync();
+                
+            // Map items in the list to type VillaDTO
+            return Ok(_mapper.Map<VillaDTO>(villaList));
             //return new List<VillaDTO>
             //{
             //    new VillaDTO { Id = 1, Name="Pool Van"},
