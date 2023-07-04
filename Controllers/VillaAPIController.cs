@@ -150,6 +150,7 @@ namespace MagicVilla_VillaAPI.Controllers
             }
 
             _context.Villas.Remove(villa);
+            _context.SaveChanges();
             return NoContent();
         }
 
