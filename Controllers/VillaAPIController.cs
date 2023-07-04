@@ -198,7 +198,7 @@ namespace MagicVilla_VillaAPI.Controllers
                 return BadRequest();
             }
 
-            var villa = await _context.Villas.FirstOrDefaultAsync(x => x.Id == id);
+            var villa = await _context.Villas.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
 
             if (villa == null)
             {
