@@ -11,14 +11,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
 });
 
-<<<<<<< Updated upstream
-builder.Services.AddControllers().AddNewtonsoftJson();
-=======
+
 // for AutoMapper/MapperConfig
 builder.Services.AddAutoMapper(typeof(MappingConfig));
+builder.Services.AddControllers().AddNewtonsoftJson();
 
-builder.Services.AddControllers();
->>>>>>> Stashed changes
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
