@@ -68,7 +68,11 @@ namespace MagicVilla_VillaAPI.Controllers
 
             // FirstOrDefault -> When you know that you will need to check whether
             // there was an element or not
+<<<<<<< Updated upstream
             Villa entity = _context.Villas.ToList().FirstOrDefault(x => x.Id == id);
+=======
+            Villa entity = await _context.Villas.FirstOrDefaultAsync(x => x.Id == id);
+>>>>>>> Stashed changes
 
             if (entity == null)
             // if somehow passes Id check
