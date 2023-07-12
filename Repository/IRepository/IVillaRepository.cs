@@ -3,25 +3,12 @@ using System.Linq.Expressions;
 
 namespace MagicVilla_VillaAPI.Repository.IRepository
 {
-    public interface IVillaRepository
+    public interface IVillaRepository : IRepository<Villa>
     {
-        // Filter to get the villa items that we want
-        // Expression<Func<Villa>> is a filter/condition/linq statement
-        Task<List<Villa>> GetAllAsync(Expression<Func<Villa, bool>> filter = null);
-
-        // For Patch -> AsNoTracking
-        Task<Villa> GetAsync(Expression<Func<Villa, bool>> filter = null, bool tracked=true);
-
-        // Creating a Villa
-        Task CreateAsync(Villa entity);
-
         // Update Villa
-        Task UpdateAsync(Villa entity);
+        // not inherited fromm IRepository because Update tends to be
+        // specific to that entity
+        Task<Villa> UpdateAsync(Villa entity);
 
-        // Remove Villa
-        Task RemoveAsync(Villa entity);
-
-        // Save changes to database
-        Task SaveChanges();
     }
 }
