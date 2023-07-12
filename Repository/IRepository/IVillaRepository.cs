@@ -7,16 +7,19 @@ namespace MagicVilla_VillaAPI.Repository.IRepository
     {
         // Filter to get the villa items that we want
         // Expression<Func<Villa>> is a filter/condition/linq statement
-        Task<List<Villa>> GetAll(Expression<Func<Villa, bool>> filter = null);
+        Task<List<Villa>> GetAllAsync(Expression<Func<Villa, bool>> filter = null);
 
         // For Patch -> AsNoTracking
-        Task<Villa> Get(Expression<Func<Villa, bool>> filter = null, bool tracked=true);
+        Task<Villa> GetAsync(Expression<Func<Villa, bool>> filter = null, bool tracked=true);
 
         // Creating a Villa
-        Task Create(Villa entity);
+        Task CreateAsync(Villa entity);
+
+        // Update Villa
+        Task UpdateAsync(Villa entity);
 
         // Remove Villa
-        Task Remove(Villa entity);
+        Task RemoveAsync(Villa entity);
 
         // Save changes to database
         Task SaveChanges();
